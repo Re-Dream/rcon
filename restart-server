@@ -1,4 +1,0 @@
-cd /var/www_redream/rcon
-./stop-server
-./start-screen
-echo "Restarted rcon"

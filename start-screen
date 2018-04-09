@@ -1,4 +1,0 @@
-#!/bin/bash
-
-cd /var/www_redream/rcon
-screen -S redream_rcon -dm bash -c "cd /var/www_redream/rcon; npm start"

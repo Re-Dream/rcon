@@ -1,3 +1,0 @@
-#!/bin/bash
-
-screen -S redream_rcon -p 0 -X stuff "^C"
