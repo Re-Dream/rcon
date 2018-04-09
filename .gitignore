@@ -1,5 +1,6 @@
 node_modules
 stop-server
 start-screen
+start-server.bat
 restart-server
 update-server
