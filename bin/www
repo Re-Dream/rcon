@@ -1,33 +1,10 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
 var app = require("../app")
-var debug = require("debug")("rcon:server")
-var http = require("http")
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || "3000")
-app.set("port", port)
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app)
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port)
-server.on("error", onError)
-server.on("listening", onListening)
 
 /**
  * Normalize a port into a number, string, or false.
@@ -48,6 +25,9 @@ function normalizePort(val) {
 
 	return false
 }
+
+var port = normalizePort(process.env.PORT || "3000")
+app.set("port", port)
 
 /**
  * Event listener for HTTP server "error" event.
@@ -88,3 +68,13 @@ function onListening() {
 		: "port " + addr.port
 	console.log("Listening on " + bind)
 }
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+var server = app.server
+server.listen(port)
+server.on("error", onError)
+server.on("listening", onListening)
+

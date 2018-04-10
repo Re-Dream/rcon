@@ -1,5 +1,11 @@
 extends layout
 
 block content
-	h1= name
-	p Welcome!
+	h1 Re-Dream Control Panel
+	p Welcome, <b>#{user.username}</b>! Is there anything you need to do today?
+	pre
+	input(type="text")
+	button Go
+	br
+	br
+	a(href="/logout") Log Out

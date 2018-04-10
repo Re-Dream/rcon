@@ -1,7 +1,9 @@
+.vscode
 node_modules
+config.json
 stop-server
 start-screen
-start-server.bat
 restart-server
 update-server
-.vscode
+test.cmd
+
