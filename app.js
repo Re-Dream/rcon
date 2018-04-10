@@ -54,13 +54,11 @@ function ifAuthed(req, res, callback) {
 	}
 }
 app.get("/", function(req, res) {
-	// console.log(req.session)
 	ifAuthed(req, res, function() {
 		var sq = new SourceQuery(1000)
 		var address = app.config.server.match(/^([^\:]+):?(\d+)?$/gi)
 		var ip = address[0]
 			port = address[1] || 27015
-		// console.log(ip, port)
 		sq.open(ip, port)
 		var server = {}
 		sq.getInfo(function(err, info) {
@@ -75,8 +73,6 @@ app.get("/", function(req, res) {
 				})
 			})
 		})
-
-		// console.log(JSON.stringify(req.user, null, 4))
 	})
 })
 function runCommand(data, target, req) {
