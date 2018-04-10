@@ -9,6 +9,7 @@ const steam = require("steam-login")
 const fs = require("fs")
 const util = require("util")
 const SourceQuery = require("sourcequery")
+const RateLimit = require("express-rate-limit");
 
 const app = express()
 app.config = JSON.parse(fs.readFileSync("config.json"))
@@ -17,6 +18,7 @@ app.sessionParser = session({
 	saveUninitialized: false,
 	secret: app.config.secret
 })
+app.enable('trust proxy')
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"))
@@ -26,6 +28,11 @@ app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, "public")))
+app.use(new RateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100,
+	delayMs: 0 // disabled
+}))
 app.use(app.sessionParser)
 app.use(steam.middleware({
     realm: "http://localhost:3000/",
