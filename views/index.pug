@@ -3,9 +3,35 @@ extends layout
 block content
 	h1 Re-Dream Control Panel
 	p Welcome, <b>#{user.username}</b>! Is there anything you need to do today?
-	pre
-	input(type="text")
-	button Go
+	pre.output
+	input(type="text" name="cmd")
+	button(type="submit") Go
 	br
 	br
 	a(href="/logout") Log Out
+	| #{" - "}
+	a(href="/config") Config
+	br
+	br
+	h2 Server status
+	if server.info && server.players
+		h3= server.info.name
+		small
+			| Map: <code>#{server.info.map}</code>
+			br
+			| <b>#{server.info.players}</b> players out of <b>#{server.info.maxplayers}</b>:
+		if server.info.players > 0
+			-
+				function pad(num) {
+					return ("00" + num).slice(-2)
+				}
+			pre
+				each ply in server.players
+					-
+						var h = Math.floor(ply.online / 60 / 60)
+						var m = Math.floor(ply.online / 60 - h * 60)
+						var s = Math.floor(ply.online - m * 60 - h * 60 * 60)
+						var time = h > 1 ? util.format("%s:%s:%s", pad(h), pad(m), pad(s)) : util.format("%s:%s", pad(m), pad(s));
+					| #{ply.name} - #{time + "\n"}
+	else
+		h3 Server seems offline..?

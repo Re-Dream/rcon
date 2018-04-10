@@ -1,0 +1,34 @@
+extends layout
+
+block content
+	h1 Re-Dream Control Panel Config
+	h2 ONLY CHANGE THIS IF YOU KNOW WHAT YOU ARE DOING!
+	| You are under the risk of making the control panel disfunctional by entering an invalid API key or accidentally removing yourself from the admin list.
+	div.config-option(name="admins")
+		h3 Admins
+			button(name="add-admin") #{"+"}
+		| They are Steam users represented by their SteamID64.
+		ul
+			each admin in config.admins
+				li
+					input(type="text" value=admin)
+					button(name="remove-admin") #{"-"}
+	div.config-option(name="apikey")
+		h3 API Key:
+		input(name="textinput" type="password" value=config.apikey)
+		input(id="apikey-visible" type="checkbox" autocomplete="off")
+		label(for="apikey-visible") Show
+	div.config-option(name="secret")
+		h3 Secret:
+		input(name="textinput" type="password" value=config.secret)
+		input(id="secret-visible" type="checkbox" autocomplete="off")
+		label(for="secret-visible") Show
+	div.config-option(name="server")
+		h3 Server Address:
+		input(name="textinput" type="text" value=config.server)
+	br
+	pre.output
+	button(type="submit") Save
+	br
+	br
+	a(href="/") Go home

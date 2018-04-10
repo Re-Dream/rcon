@@ -6,4 +6,5 @@ start-screen
 restart-server
 update-server
 test.cmd
+custom_commands.js
 

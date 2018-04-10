@@ -1,16 +1,16 @@
-var http = require("http")
-var ws = require("ws")
-var createError = require("http-errors")
-var express = require("express")
-var session = require("express-session")
-var path = require("path")
-var logger = require("morgan")
-var steam = require("steam-login")
-var fs = require("fs")
-var util = require("util")
-var cp = require("child_process")
+const http = require("http")
+const ws = require("ws")
+const createError = require("http-errors")
+const express = require("express")
+const session = require("express-session")
+const path = require("path")
+const logger = require("morgan")
+const steam = require("steam-login")
+const fs = require("fs")
+const util = require("util")
+const SourceQuery = require("sourcequery")
 
-var app = express()
+const app = express()
 app.config = JSON.parse(fs.readFileSync("config.json"))
 app.sessionParser = session({
 	resave: false,
@@ -39,30 +39,13 @@ app.use((req, res, next) => {
 
 /* GET home page. */
 
-/* to be reused later
-var commands = {
-	help: {
-		name: "help",
-		callback: function(req, res) {
-			var buf = "Available commands:\n"
-			for (name in commands) {
-				var command = commands[name]
-				buf += util.format("	<b>%s</b>%s\n", name, command.help ? ": " + command.help : "")
-			}
-			res.render("index", {
-				output: buf
-			})
-		},
-		help: "Displays this."
-	},
-}
-*/
 function ifAuthed(req, res, callback) {
-	if (req.session.steamUser) {
+	if (!req.session.steamUser) {
 		if (res)
+			req.session.from = req.path
 			res.redirect("/authenticate")
 	} else {
-		if (app.config.admins.includes(req.user.steamid)) {
+		if (app.config.admins.includes(req.session.steamUser.steamid)) {
 			callback()
 		} else {
 			if (res)
@@ -71,27 +54,54 @@ function ifAuthed(req, res, callback) {
 	}
 }
 app.get("/", function(req, res) {
-	console.log(req.session)
+	// console.log(req.session)
 	ifAuthed(req, res, function() {
-		res.render("index", {
-			name: req.user.username,
+		var sq = new SourceQuery(1000)
+		var address = app.config.server.match(/^([^\:]+):?(\d+)?$/gi)
+		var ip = address[0]
+			port = address[1] || 27015
+		// console.log(ip, port)
+		sq.open(ip, port)
+		var server = {}
+		sq.getInfo(function(err, info) {
+			server.info = info
+
+			sq.getPlayers(function(err, players) {
+				server.players = players
+
+				res.render("index", {
+					server: server,
+					util: util
+				})
+			})
 		})
+
 		// console.log(JSON.stringify(req.user, null, 4))
 	})
 })
 
-app.get("/authenticate", steam.authenticate(), function(req, res) {
-    res.redirect("/")
+app.get(	"/authenticate", steam.authenticate(), function(req, res) {
+	res.redirect(req.session.from || "/")
+	req.session.from = undefined
 })
 app.get("/verify", steam.verify(), function(req, res) {
 	res.locals.user = req.user
-	res.redirect("/")
+	res.redirect(req.session.from || "/")
+	req.session.from = undefined
 	// res.send(req.user).end()
 })
 app.get("/logout", steam.enforceLogin("/"), function(req, res) {
 	req.logout()
 	res.locals.user = undefined
     res.render("logout")
+})
+
+app.get("/config", function(req, res) {
+	ifAuthed(req, res, function() {
+		res.render("config", {
+			config: app.config
+		})
+	})
 })
 
 // catch 404 and forward to error handler
@@ -120,9 +130,46 @@ app.wss = new ws.Server({
 	},
 	server
 })
+
+const commands = require("./commands.js")
 app.wss.on("connection", (ws, req) => {
 	ws.on("message", (message) => {
-		console.log(req.session)
+		var data
+		try {
+			data = JSON.parse(message)
+		} catch (e) {
+
+		}
+
+		var command = (data && data.cmd) ? commands[data.cmd] : undefined
+		if (command) {
+			command.callback(ws, req)
+		} else if (data.cmd) {
+			ws.send("Invalid input!\n\n")
+			if (commands.help)
+				commands.help.callback(ws, req)
+			ws.close()
+		}
+
+		var config = (data && data.config) ? data.config : undefined
+		if (config) {
+			console.log(config)
+			console.log("before:")
+			console.log(app.config)
+			for (option in config) {
+				if (app.config[option]) {
+					app.config[option] = config[option]
+				}
+			}
+			console.log("after:")
+			console.log(app.config)
+			fs.writeFileSync("config.json", JSON.stringify(app.config, null, 4))
+			ws.send("Config saved successfully!")
+			ws.close()
+		} else if (data.cmd) {
+			ws.close()
+		}
+		// console.log(req.session)
 	})
 })
 

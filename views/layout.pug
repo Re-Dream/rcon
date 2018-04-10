@@ -1,10 +1,7 @@
 doctype html
 html
 	head
-		if result
-			title Re-Dream Control Panel: #{result}
-		else
-			title Re-Dream Control Panel
+		title Re-Dream Control Panel
 		link(rel="stylesheet", href="/css/style.css")
 		if user && user.username
 			script(src="http://code.jquery.com/jquery-3.3.1.min.js")

@@ -1,17 +1,17 @@
 To Do:
 	✔ HTTP and Websocket server on port 3000 by default @done(18-04-10 05:44)
-		☐ Get back to using express-ws for simplicity..?
+		✘ Get back to using express-ws for simplicity..? @cancelled(18-04-10 15:08)
 	✔ Config support @done(18-04-10 05:34)
 	✔ Steam login @done(18-04-10 05:34)
 	✔ Port the website's look over from the PHP version @done(18-04-10 05:34)
 	✔ Allow Websocket connection for logged in users @done(18-04-10 05:34)
-	☐ Command execution
+	✔ Command execution @done(18-04-10 15:41)
 		- Get command from text input, create Websocket connection on "Go" button click and send command.
 		- If command is valid, server executes it and responds with output, live.
 		- End connection on command end.
 		- Test with test.cmd for the time being
-	☐ Make use of sourcequery
-	☐ Config page to modify all config.json variables on the fly
+	✔ Make use of sourcequery @done(18-04-10 16:46)
+	✔ Config page to modify all config.json variables on the fly @done(18-04-10 19:38)
 	☐ "Authorization" header support, for Discord Bot and !rocket command?
 	☐ Clean up code to make it my own
-	☐ Beautify page look
+	☐ Beautify page look (use some template or something, lazy)
