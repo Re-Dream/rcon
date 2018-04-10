@@ -12,6 +12,8 @@ To Do:
 		- Test with test.cmd for the time being
 	✔ Make use of sourcequery @done(18-04-10 16:46)
 	✔ Config page to modify all config.json variables on the fly @done(18-04-10 19:38)
-	☐ "Authorization" header support, for Discord Bot and !rocket command?
-	☐ Clean up code to make it my own
+	✔ "Authorization" header support, for Discord Bot and !rocket command? @done(18-04-10 21:07)
+		✔ Wrap both WS and HTTP response into a same object for code readability @done(18-04-10 21:07)
+	☐ Implement our own custom commands
+	☐ Clean up code
 	☐ Beautify page look (use some template or something, lazy)

@@ -6,13 +6,22 @@ block content
 	| You are under the risk of making the control panel disfunctional by entering an invalid API key or accidentally removing yourself from the admin list.
 	div.config-option(name="admins")
 		h3 Admins
-			button(name="add-admin") #{"+"}
+			button(name="add") #{"+"}
 		| They are Steam users represented by their SteamID64.
 		ul
 			each admin in config.admins
 				li
 					input(type="text" value=admin)
-					button(name="remove-admin") #{"-"}
+					button(name="remove") #{"-"}
+	div.config-option(name="authorized")
+		h3 Authorized
+			button(name="add") #{"+"}
+		| Valid values you can pass to the "Authorization" header when POSTing to run commands.
+		ul
+			each authorized in config.authorized
+				li
+					input(type="text" value=authorized)
+					button(name="remove") #{"-"}
 	div.config-option(name="apikey")
 		h3 API Key:
 		input(name="textinput" type="password" value=config.apikey)

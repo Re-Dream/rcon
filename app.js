@@ -1,5 +1,5 @@
 const http = require("http")
-const ws = require("ws")
+const WebSocket = require("ws")
 const createError = require("http-errors")
 const express = require("express")
 const session = require("express-session")
@@ -79,8 +79,43 @@ app.get("/", function(req, res) {
 		// console.log(JSON.stringify(req.user, null, 4))
 	})
 })
+function runCommand(data, target, req) {
+	var res = target
+	switch (target.constructor.name) {
+		case "ServerResponse": {
+			res.send = target.write
+			res.close = target.end
+			break
+		}
+		case "WebSocket": {
+			break
+		}
+	}
 
-app.get(	"/authenticate", steam.authenticate(), function(req, res) {
+	var command = (data && data.cmd) ? commands[data.cmd] : undefined
+	if (command) {
+		command.callback(res, req)
+	} else if (data.cmd !== undefined) {
+		res.send("Invalid input!\n\n")
+		commands.help.callback(res, req)
+	}
+}
+app.post("/", function(req, res, next) {
+	if (app.config.authorized.includes(req.get("Authorization"))) {
+		var data
+		try {
+			data = req.body
+		} catch (e) {
+
+		}
+
+		runCommand(data, res, req)
+	} else {
+		next(createError(403))
+	}
+})
+
+app.get("/authenticate", steam.authenticate(), function(req, res) {
 	res.redirect(req.session.from || "/")
 	req.session.from = undefined
 })
@@ -122,7 +157,7 @@ app.use(function(err, req, res, next) {
 
 const server = http.createServer(app)
 app.server = server
-app.wss = new ws.Server({
+app.wss = new WebSocket.Server({
 	verifyClient: (info, done) => {
 		app.sessionParser(info.req, {}, () => {
 			done(info.req.session.steamUser)
@@ -141,35 +176,20 @@ app.wss.on("connection", (ws, req) => {
 
 		}
 
-		var command = (data && data.cmd) ? commands[data.cmd] : undefined
-		if (command) {
-			command.callback(ws, req)
-		} else if (data.cmd) {
-			ws.send("Invalid input!\n\n")
-			if (commands.help)
-				commands.help.callback(ws, req)
-			ws.close()
-		}
-
 		var config = (data && data.config) ? data.config : undefined
 		if (config) {
-			console.log(config)
-			console.log("before:")
-			console.log(app.config)
 			for (option in config) {
 				if (app.config[option]) {
 					app.config[option] = config[option]
 				}
 			}
-			console.log("after:")
-			console.log(app.config)
 			fs.writeFileSync("config.json", JSON.stringify(app.config, null, 4))
 			ws.send("Config saved successfully!")
 			ws.close()
-		} else if (data.cmd) {
-			ws.close()
+			return
 		}
-		// console.log(req.session)
+
+		runCommand(data, ws, req)
 	})
 })
 

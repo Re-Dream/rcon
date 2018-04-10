@@ -15,26 +15,27 @@ $(function() {
 		}
 	})
 
-	function removeAdmin() {
-		var admin = $(this).parent()
-		if (admin[0] && admin.is("li")) {
-			admin.remove()
+	function removeItem() {
+		var item = $(this).parent()
+		if (item[0] && item.is("li")) {
+			item.remove()
 		}
 	}
-	$("button[name='remove-admin']").click(removeAdmin)
-	$("button[name='add-admin']").click(function() {
-		var admins = $("div.config-option[name='admins'] ul")
-		if (admins[0]) {
-			var admin = $("<li>")
-			var steamid = $("<input>")
-				steamid.attr("type", "text")
-				steamid.appendTo(admin)
+	$("button[name='remove']").click(removeItem)
+	$("button[name='add']").click(function() {
+		var items = $(this).parent().parent().find("ul")
+		console.log(items)
+		if (items[0] && items.is("ul")) {
+			var item = $("<li>")
+			var value = $("<input>")
+				value.attr("type", "text")
+				value.appendTo(item)
 			var remove = $("<button>")
-				remove.attr("name", "remove-admin")
+				remove.attr("name", "remove")
 				remove.text("-")
-				remove.click(removeAdmin)
-				remove.appendTo(admin)
-			admin.appendTo(admins)
+				remove.click(removeItem)
+				remove.appendTo(item)
+			item.appendTo(items)
 		}
 	})
 
@@ -52,6 +53,10 @@ $(function() {
 						config.admins = []
 						$("div.config-option[name='admins'] ul li input").map(function() {
 							config.admins.push($(this).val())
+						})
+						config.authorized = []
+						$("div.config-option[name='authorized'] ul li input").map(function() {
+							config.authorized.push($(this).val())
 						})
 						config.apikey = $("div.config-option[name='apikey'] input[name='textinput']").val()
 						config.secret = $("div.config-option[name='secret'] input[name='textinput']").val()

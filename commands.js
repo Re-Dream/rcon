@@ -3,14 +3,14 @@ const util = require("util")
 
 var commands = {
 	help: {
-		callback: function(ws, req) {
+		callback: function(target, req) {
 			var buf = "Available commands:\n"
 			for (name in commands) {
 				var command = commands[name]
 				buf += util.format("	<b>%s</b>%s\n", name, command.help ? ": " + command.help : "")
 			}
-			ws.send(buf)
-			ws.close()
+			target.send(buf)
+			target.close()
 		},
 		help: "Displays this."
 	}
