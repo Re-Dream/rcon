@@ -8,34 +8,49 @@ $(function() {
 		event.preventDefault()
 	})
 
-	$("input[type='checkbox']").change(function() {
-		var option = $(this).parent()
-		if (option[0] && option.hasClass("config-option")) {
-			option.find("input[name='textinput']").attr("type", $(this).is(":checked") ? "text" : "password")
+	function togglePassword() {
+		var option = $(this).parent().siblings("input[name='textinput']")
+		if (option[0]) {
+			option.attr("type", $(this).is(":checked") ? "text" : "password")
 		}
-	})
-
+	}
 	function removeItem() {
 		var item = $(this).parent()
 		if (item[0] && item.is("li")) {
 			item.remove()
 		}
 	}
+	$("input[type='checkbox']").change(togglePassword)
 	$("button[name='remove']").click(removeItem)
 	$("button[name='add']").click(function() {
-		var items = $(this).parent().parent().find("ul")
-		console.log(items)
-		if (items[0] && items.is("ul")) {
+		var option = $(this).parents("div.config-option")
+		if (option[0]) {
 			var item = $("<li>")
+
 			var value = $("<input>")
-				value.attr("type", "text")
-				value.appendTo(item)
+				value.attr("type", option.attr("name") == "authorized" ? "password" : "text")
+			value.appendTo(item)
+
 			var remove = $("<button>")
 				remove.attr("name", "remove")
 				remove.text("-")
 				remove.click(removeItem)
-				remove.appendTo(item)
-			item.appendTo(items)
+			remove.appendTo(item)
+
+			if (option.attr("name") == "authorized") {
+				value.attr("name", "textinput")
+
+				var label = $("<label>")
+					var checkbox = $("<input>", {
+						type: "checkbox",
+						autocomplete: "off"
+					})
+					checkbox.change(togglePassword)
+					checkbox.appendTo(label)
+					label.append("Show")
+				label.appendTo(item)
+			}
+			item.appendTo(option.find("ul"))
 		}
 	})
 
@@ -64,7 +79,6 @@ $(function() {
 						var json = JSON.stringify({
 							config: config
 						})
-						console.log(json)
 						ws.send(json)
 						break
 					}

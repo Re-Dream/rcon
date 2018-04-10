@@ -20,18 +20,23 @@ block content
 		ul
 			each authorized in config.authorized
 				li
-					input(type="text" value=authorized)
+					input(name="textinput" type="password" value=authorized)
 					button(name="remove") #{"-"}
+					label
+						input(type="checkbox" autocomplete="off")
+						| Show
 	div.config-option(name="apikey")
 		h3 API Key:
 		input(name="textinput" type="password" value=config.apikey)
-		input(id="apikey-visible" type="checkbox" autocomplete="off")
-		label(for="apikey-visible") Show
+		label
+			input(type="checkbox" autocomplete="off")
+			| Show
 	div.config-option(name="secret")
 		h3 Secret:
 		input(name="textinput" type="password" value=config.secret)
-		input(id="secret-visible" type="checkbox" autocomplete="off")
-		label(for="secret-visible") Show
+		label
+			input(type="checkbox" autocomplete="off")
+			| Show
 	div.config-option(name="server")
 		h3 Server Address:
 		input(name="textinput" type="text" value=config.server)
