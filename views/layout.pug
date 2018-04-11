@@ -2,11 +2,22 @@ doctype html
 html
 	head
 		title Re-Dream Control Panel
-		link(rel="stylesheet", href="/css/style.css")
-		if user && user.username
-			script(src="http://code.jquery.com/jquery-3.3.1.min.js")
-			script(src="/js/main.js")
+		link(rel="stylesheet" href="/css/style.css")
+		if values
+			script var pugLocals = !{values.replace(/#<\//g, "<\\/")}
+		script(src="http://code.jquery.com/jquery-3.3.1.min.js")
+		script(src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js")
+		script(src="/js/main.js")
 	body
-		.container
-			.content
-				block content
+		#app
+			header.navbar
+				section.navbar-section
+					a.btn.btn-link(href="/") Home
+				section.navbar-center
+					img(src="/img/logo.png" height=32 style="padding: 4px;")
+				section
+				section.navbar-section
+					a.btn.btn-link(href="/logout") Logout
+					a.btn.btn-link(href="/config") Configuration
+			h1.text-center Re-Dream
+			block content

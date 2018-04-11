@@ -40,9 +40,9 @@ app.use(steam.middleware({
     apiKey: app.config.apikey}
 ))
 app.use((req, res, next) => {
-    res.locals.user = req.user;
-    next();
-});
+	res.locals.user = req.user
+    next()
+})
 
 /* GET home page. */
 
@@ -74,10 +74,12 @@ app.get("/", function(req, res) {
 			sq.getPlayers(function(err, players) {
 				server.players = players
 
-				res.render("index", {
+				var locals = {
 					server: server,
 					util: util
-				})
+				}
+				locals.values = JSON.stringify(locals)
+				res.render("index", locals)
 			})
 		})
 	})
@@ -136,9 +138,11 @@ app.get("/logout", steam.enforceLogin("/"), function(req, res) {
 
 app.get("/config", function(req, res) {
 	ifAuthed(req, res, function() {
-		res.render("config", {
+		var locals = {
 			config: app.config
-		})
+		}
+		locals.values = JSON.stringify(locals)
+		res.render("config", locals)
 	})
 })
 

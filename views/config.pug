@@ -1,48 +1,68 @@
 extends layout
 
 block content
-	h1 Re-Dream Control Panel Config
-	h2 ONLY CHANGE THIS IF YOU KNOW WHAT YOU ARE DOING!
-	| You are under the risk of making the control panel disfunctional by entering an invalid API key or accidentally removing yourself from the admin list.
-	div.config-option(name="admins")
-		h3 Admins
-			button(name="add") #{"+"}
-		| They are Steam users represented by their SteamID64.
-		ul
-			each admin in config.admins
-				li
-					input(type="text" value=admin)
-					button(name="remove") #{"-"}
-	div.config-option(name="authorized")
-		h3 Authorized
-			button(name="add") #{"+"}
-		| Valid values you can pass to the "Authorization" header when POSTing to run commands.
-		ul
-			each authorized in config.authorized
-				li
-					input(name="textinput" type="password" value=authorized)
-					button(name="remove") #{"-"}
-					label
-						input(type="checkbox" autocomplete="off")
-						| Show
-	div.config-option(name="apikey")
-		h3 API Key:
-		input(name="textinput" type="password" value=config.apikey)
-		label
-			input(type="checkbox" autocomplete="off")
-			| Show
-	div.config-option(name="secret")
-		h3 Secret:
-		input(name="textinput" type="password" value=config.secret)
-		label
-			input(type="checkbox" autocomplete="off")
-			| Show
-	div.config-option(name="server")
-		h3 Server Address:
-		input(name="textinput" type="text" value=config.server)
-	br
-	pre.output
-	button(type="submit") Save
-	br
-	br
-	a(href="/") Go home
+	.container
+		.columns.cols-centered
+			.column.col-6.col-lg-12.col-xl-9
+				.panel
+					.panel-header.text-center
+						h4.panel-title Configuration
+						b.panel-subtitle ONLY CHANGE THIS IF YOU KNOW WHAT YOU ARE DOING!
+						.panel-subtitle You are under the risk of making the control panel disfunctional by entering an invalid API key or accidentally removing yourself from the admin list.
+					.panel-body
+						.form-horizontal
+							.form-group
+								.col-4.col-sm-12
+									.input-group.my-1.align-center
+										button.btn.btn-primary.btn-sm(v-on:click="config.admins.push('')")
+											i.icon.icon-plus
+										label.form-label.ml-2 Administrators
+								.col-8.col-sm-12
+									.input-group.my-1(v-for="(item, index) in config.admins")
+										input.form-input(type="text" v-model="config.admins[index]" placeholder="SteamID64")
+										button.btn.btn-primary.input-group-btn(v-on:click="config.admins.splice(index, 1)")
+											i.icon.icon-minus
+							.form-group
+								.col-4.col-sm-12
+									.input-group.my-1.align-center
+										button.btn.btn-primary.btn-sm(v-on:click="config.authorized.push('')")
+											i.icon.icon-plus
+										label.form-label.mx-2 Authorized
+										label.form-checkbox
+											input(type="checkbox" v-model="displayAuthorized" true-value="text" false-value="password")
+											i.form-icon
+											| Show
+								.col-8.col-sm-12
+									.input-group.my-1(v-for="(item, index) in config.authorized")
+										input.form-input(v-bind:type="displayAuthorized" v-model="config.authorized[index]")
+										button.btn.btn-primary.input-group-btn(v-on:click="config.authorized.splice(index, 1)")
+											i.icon.icon-minus
+							.form-group
+								.col-4.col-sm-12
+									label.form-label.my-1 API key
+								.col-8.col-sm-12
+									.input-group.my-1
+										input.form-input(v-bind:type="displayApiKey" v-model="config.apikey")
+										label.form-checkbox.ml-2.pr-0
+											input(type="checkbox" v-model="displayApiKey" true-value="text" false-value="password")
+											i.form-icon
+											| Show
+							.form-group
+								.col-4.col-sm-12
+									label.form-label.my-1 Secret
+								.col-8.col-sm-12
+									.input-group.my-1
+										input.form-input(v-bind:type="displaySecret" v-model="config.secret")
+										label.form-checkbox.ml-2.pr-0
+											input(type="checkbox" v-model="displaySecret" true-value="text" false-value="password")
+											i.form-icon
+											| Show
+							.form-group(name="address")
+								.col-4.col-sm-12
+									label.form-label.my-1 Server address
+								.col-8.col-sm-12
+									.input-group.my-1
+										input.form-input(type="text" v-model="config.server")
+					.panel-footer
+						pre.code(v-html="output")
+						button.btn.btn-primary.btn-block(type="submit" v-on:click="sendConfig") Save

@@ -1,0 +1,30 @@
+
+// Define variables to override default ones
+// https://github.com/picturepan2/spectre/blob/master/src/_variables.scss
+$primary-color: rgba(49, 108, 218, 1);
+$dark-color: rgb(53, 71, 104);
+
+// Import full Spectre source code
+@import "node_modules/spectre.css/src/spectre";
+@import "node_modules/spectre.css/src/spectre-exp";
+@import "node_modules/spectre.css/src/spectre-icons";
+
+.columns.cols-centered {
+	justify-content: center;
+}
+.ml-auto {
+	margin-left: auto;
+}
+.mr-auto {
+	margin-right: auto;
+}
+.mx-auto {
+	margin-left: auto;
+	margin-right: auto;
+}
+.align-center {
+	align-items: center;
+}
+.navbar {
+	border-bottom: 1px solid $gray-color-light;
+}

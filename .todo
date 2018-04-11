@@ -9,11 +9,23 @@ To Do:
 		- Get command from text input, create Websocket connection on "Go" button click and send command.
 		- If command is valid, server executes it and responds with output, live.
 		- End connection on command end.
-		- Test with test.cmd for the time being
+		- Test with test.cmd for the time being.
 	✔ Make use of sourcequery @done(18-04-10 16:46)
 	✔ Config page to modify all config.json variables on the fly @done(18-04-10 19:38)
 	✔ "Authorization" header support, for Discord Bot and !rocket command? @done(18-04-10 21:07)
 		✔ Wrap both WS and HTTP response into a same object for code readability @done(18-04-10 21:07)
+	☐ Make good front-end
+		✔ Use spectre.css @done(18-04-11 07:08)
+		✔ Implement Vue.js @done(18-04-11 07:08)
+		☐ Pug locals to clientside JavaScript
+			☐ Find a better way than setting "values" manually everytime (see app.js:77)
+		☐ Use mixins in Pug to avoid repetition and confusion (config.pug is especially confusing)
+		☐ Add toasts / notifications to tell when command has ended or config has been saved
+		☐ Customize navbar
+		☐ Customize colors more
+		☐ Center panels vertically
+		☐ Check responsiveness
+		☐ More?
 	☐ Implement our own custom commands
-	☐ Clean up code
-	☐ Beautify page look (use some template or something, lazy)
+	☐ Clean up code in general
+
