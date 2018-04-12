@@ -29,17 +29,18 @@ To Do:
 			- Too difficult to implement properly and would probably be a pain
 		✔ Check responsiveness @done?(18-04-12 04:10)
 		✔ Make server status player times continue going while the page is active @done(18-04-12 04:38)
-		☐ Add a background image?
 		✔ Add configurable dark theme @done(18-04-12 08:37)
 		✔ Server start / stop / restart button on server status, show up according to status @done(18-04-13 00:24)
-			✔ Pug mixin to add action buttons easily over commands @done(18-04-13 00:24)
+		✔ Pug mixin to add action buttons easily over commands @done(18-04-13 00:24)
 		✔ Display avatar and name somewhere @done(18-04-13 00:12)
+		☐ Add a background image?
 		- More?
 	✔ Check why Steam login is so fucking slow @done?(18-04-12 04:11)
 	✔ Allow usage without login if in dev mode @done(18-04-12 23:48)
 	☐ /console endpoint to show full console somehow (this will be fucking hard)
-		- Look into github repos for this
-		- Reverse proxy from apache or something?
+		- https://www.npmjs.com/package/express-http-proxy
+		- https://github.com/nodejitsu/node-http-proxy/issues/891
+		- https://github.com/tsl0922/ttyd
 	☐ Implement the actual commands
 	✔ Clean up code in general @done(18-04-12 05:53)
 
