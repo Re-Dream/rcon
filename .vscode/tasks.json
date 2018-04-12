@@ -15,7 +15,7 @@
 		{
 			"label": "Sass Compile",
 			"type": "shell",
-			"command": "node-sass style.scss public/css/style.css",
+			"command": "node-sass style.scss public/css/style.css --output-style compressed",
 			"group": {
                 "kind": "build",
                 "isDefault": true

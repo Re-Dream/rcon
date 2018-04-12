@@ -1,16 +1,24 @@
 
 // Define variables to override default ones
 // https://github.com/picturepan2/spectre/blob/master/src/_variables.scss
-$primary-color: rgba(49, 108, 218, 1);
-$dark-color: rgb(53, 71, 104);
+$primary-color: rgb(96, 149, 203);
+$dark-color: rgb(21, 46, 70);
 
 // Import full Spectre source code
 @import "node_modules/spectre.css/src/spectre";
 @import "node_modules/spectre.css/src/spectre-exp";
 @import "node_modules/spectre.css/src/spectre-icons";
 
-.columns.cols-centered {
+// Custom rules
+.flex-center {
 	justify-content: center;
+	align-items: center;
+}
+.flex-x-center {
+	justify-content: center;
+}
+.flex-y-center {
+	align-items: center;
 }
 .ml-auto {
 	margin-left: auto;
@@ -22,9 +30,133 @@ $dark-color: rgb(53, 71, 104);
 	margin-left: auto;
 	margin-right: auto;
 }
-.align-center {
-	align-items: center;
-}
 .navbar {
 	border-bottom: 1px solid $gray-color-light;
+}
+footer {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background: $light-color;
+	border-top: 1px solid $gray-color-light;
+
+	.footer-section {
+		align-items: center;
+		display: flex;
+		flex: 1 0 0;
+
+		&:not(:first-child):last-child {
+			justify-content: flex-end;
+		}
+	}
+
+	.footer-center {
+		align-items: center;
+		display: flex;
+		flex: 0 0 auto;
+	}
+}
+pre.code {
+	display: block;
+	background-color: $light-color;
+	padding: 6px;
+	border-radius: 4px;
+	border: 1px solid $gray-color;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	font-size: 87.5%;
+}
+
+$primary-color-light: lighten($primary-color, 33%);
+$darker-color: darken($dark-color, 2.5%);
+$lighter-dark-color: lighten($dark-color, 17.5%);
+
+$darker-success-color: darken($success-color, 17.5%);
+$darker-warning-color: darken($warning-color, 17.5%);
+$darker-error-color: darken($error-color, 17.5%);
+
+#app {
+	min-width: 100vw;
+	min-height: 100vh;
+}
+.dark-theme {
+	background: $dark-color !important;
+	color: $primary-color-light !important;
+
+	header.navbar, footer {
+		background: darken($dark-color, 0.5%);
+		border-color: $lighter-dark-color;
+	}
+
+	a {
+		color: darken($primary-color-light, 17.5%) !important;
+	}
+
+	.panel {
+		background: $darker-color;
+		border-color: $lighter-dark-color;
+	}
+
+	.form-input {
+		color: $primary-color-light;
+		background: $dark-color;
+		border-color: $lighter-dark-color;
+	}
+
+	.form-checkbox .form-icon {
+		border-color: $lighter-dark-color;
+		background: $dark-color;
+	}
+
+	.form-checkbox input:checked + .form-icon, .form-radio input:checked + .form-icon, .form-switch input:checked + .form-icon {
+		border-color: $lighter-dark-color;
+		background: $lighter-dark-color;
+	}
+
+	.form-checkbox input:checked + .form-icon::before {
+		border-color: $primary-color-light;
+	}
+
+	.btn.btn-primary {
+		background: $lighter-dark-color;
+		border-color: darken($lighter-dark-color, 2.5%);
+
+		&:hover, &:focus {
+			background: darken($lighter-dark-color, 2.5%);
+		}
+		&:active {
+			background: darken($lighter-dark-color, 5%);
+		}
+	}
+
+	pre.code {
+		color: $primary-color-light;
+		background: $dark-color;
+		border-color: $lighter-dark-color;
+	}
+
+	.table td, .table th {
+		border-color: $lighter-dark-color;
+	}
+
+	.toast {
+		&.toast-success {
+			background: $darker-success-color;
+		}
+		&.toast-warning {
+			background: $darker-warning-color;
+		}
+		&.toast-error {
+			background: $darker-error-color;
+		}
+
+		color: $primary-color-light;
+	}
 }

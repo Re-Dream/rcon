@@ -20,6 +20,28 @@ app.sessionParser = session({
 })
 app.enable('trust proxy')
 
+// Hack to send all desired locals in one JSON string so the client can also read them
+var badLocals = [
+	"message",
+	"error",
+	"values"
+]
+var _render = app.response.render
+app.response.render = function(view, options, ...args) {
+	var res = this
+	var locals = {}
+	for (var name in res.locals) {
+		if (!badLocals.includes(name)) {
+			locals[name] = res.locals[name]
+		}
+	}
+	for (var name in options) {
+		locals[name] = options[name]
+	}
+	res.locals.values = JSON.stringify(locals) || "{}"
+	_render.call(res, view, options, ...args)
+}
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "pug")
@@ -39,9 +61,9 @@ app.use(steam.middleware({
     verify: "http://localhost:3000/verify",
     apiKey: app.config.apikey}
 ))
-app.use((req, res, next) => {
+app.use(function(req, res, next) {
 	res.locals.user = req.user
-    next()
+	next()
 })
 
 /* GET home page. */
@@ -74,61 +96,22 @@ app.get("/", function(req, res) {
 			sq.getPlayers(function(err, players) {
 				server.players = players
 
-				var locals = {
-					server: server,
-					util: util
-				}
-				locals.values = JSON.stringify(locals)
-				res.render("index", locals)
+				res.render("index", {
+					server: server
+				})
 			})
 		})
 	})
 })
-function runCommand(data, target, req) {
-	var res = target
-	switch (target.constructor.name) {
-		case "ServerResponse": {
-			res.send = target.write
-			res.close = target.end
-			break
-		}
-		case "WebSocket": {
-			break
-		}
-	}
-
-	var command = (data && data.cmd) ? commands[data.cmd] : undefined
-	if (command) {
-		command.callback(res, req)
-	} else if (data.cmd !== undefined) {
-		res.send("Invalid input!\n\n")
-		commands.help.callback(res, req)
-	}
-}
-app.post("/", function(req, res, next) {
-	if (app.config.authorized.includes(req.get("Authorization"))) {
-		var data
-		try {
-			data = req.body
-		} catch (e) {
-
-		}
-
-		runCommand(data, res, req)
-	} else {
-		next(createError(403))
-	}
-})
 
 app.get("/authenticate", steam.authenticate(), function(req, res) {
-	res.redirect(req.session.from || "/")
-	req.session.from = undefined
+	// res.redirect(req.session.from || "/")
+	// req.session.from = undefined
 })
 app.get("/verify", steam.verify(), function(req, res) {
 	res.locals.user = req.user
 	res.redirect(req.session.from || "/")
 	req.session.from = undefined
-	// res.send(req.user).end()
 })
 app.get("/logout", steam.enforceLogin("/"), function(req, res) {
 	req.logout()
@@ -138,11 +121,9 @@ app.get("/logout", steam.enforceLogin("/"), function(req, res) {
 
 app.get("/config", function(req, res) {
 	ifAuthed(req, res, function() {
-		var locals = {
+		res.render("config", {
 			config: app.config
-		}
-		locals.values = JSON.stringify(locals)
-		res.render("config", locals)
+		})
 	})
 })
 
@@ -165,8 +146,8 @@ app.use(function(err, req, res, next) {
 const server = http.createServer(app)
 app.server = server
 app.wss = new WebSocket.Server({
-	verifyClient: (info, done) => {
-		app.sessionParser(info.req, {}, () => {
+	verifyClient: function(info, done) {
+		app.sessionParser(info.req, {}, function() {
 			done(info.req.session.steamUser)
 		})
 	},
@@ -174,8 +155,51 @@ app.wss = new WebSocket.Server({
 })
 
 const commands = require("./commands.js")
-app.wss.on("connection", (ws, req) => {
-	ws.on("message", (message) => {
+function runCommand(data, target, req) {
+	var res = Object.create(target)
+	switch (target.constructor.name) {
+		case "ServerResponse": {
+			res.send = function(data, ...args) {
+				target.write(JSON.stringify(data), ...args)
+			}
+			res.close = target.end
+			break
+		}
+		case "WebSocket": {
+			res.send = function(data, ...args) {
+				target.send(JSON.stringify(data), ...args)
+			}
+			break
+		}
+	}
+
+	var command = (data && data.cmd) ? commands[data.cmd] : undefined
+	if (command) {
+		command.callback(res, req)
+	} else if (data.cmd !== undefined) {
+		res.send({
+			output: "Invalid input!\n\n",
+			success: false
+		})
+		commands.help.callback(res, req)
+	}
+}
+app.post("/", function(req, res, next) {
+	if (app.config.authorizations.includes(req.get("Authorization"))) {
+		var data
+		try {
+			data = req.body
+		} catch (e) {
+
+		}
+
+		runCommand(data, res, req)
+	} else {
+		next(createError(403))
+	}
+})
+app.wss.on("connection", function(ws, req) {
+	ws.on("message", function(message) {
 		var data
 		try {
 			data = JSON.parse(message)
@@ -185,13 +209,16 @@ app.wss.on("connection", (ws, req) => {
 
 		var config = (data && data.config) ? data.config : undefined
 		if (config) {
-			for (option in config) {
+			for (var option in config) {
 				if (app.config[option]) {
 					app.config[option] = config[option]
 				}
 			}
 			fs.writeFileSync("config.json", JSON.stringify(app.config, null, 4))
-			ws.send("Config saved successfully!")
+			ws.send(JSON.stringify({
+				output: "Config saved successfully!",
+				success: true
+			}))
 			ws.close()
 			return
 		}

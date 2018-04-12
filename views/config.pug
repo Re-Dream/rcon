@@ -1,68 +1,60 @@
 extends layout
 
+mixin addField(value, text, checkbox, placeholder)
+	.form-group
+		.col-4.col-sm-12
+			label.form-label.my-1= text
+		.col-8.col-sm-12
+			.input-group.my-1
+				input.form-input(v-bind:type=(checkbox ? ('display.' + value) : undefined) v-model=("config." + value) placeholder=placeholder)
+				if checkbox
+					label.form-checkbox.ml-2.pr-0
+						input(type="checkbox" v-model=("display." + value) true-value="text" false-value="password")
+						i.form-icon
+						| Show
+
 block content
 	.container
-		.columns.cols-centered
+		.columns.flex-center
 			.column.col-6.col-lg-12.col-xl-9
 				.panel
 					.panel-header.text-center
 						h4.panel-title Configuration
-						b.panel-subtitle ONLY CHANGE THIS IF YOU KNOW WHAT YOU ARE DOING!
-						.panel-subtitle You are under the risk of making the control panel disfunctional by entering an invalid API key or accidentally removing yourself from the admin list.
+						b.panel-subtitle WARNING: ONLY CHANGE THIS IF YOU KNOW WHAT YOU ARE DOING!
+						.panel-subtitle You are under the risk of rendering the control panel unusable by entering an invalid API key or accidentally removing yourself from the admin list!
 					.panel-body
 						.form-horizontal
+							// Admins
 							.form-group
 								.col-4.col-sm-12
-									.input-group.my-1.align-center
-										button.btn.btn-primary.btn-sm(v-on:click="config.admins.push('')")
+									.input-group.my-1.flex-y-center
+										button.btn.btn-primary.btn-sm(id="add-admin" v-on:click="config.admins.push('')")
 											i.icon.icon-plus
-										label.form-label.ml-2 Administrators
+										label.form-label.ml-2(for="add-admin") Administrators
 								.col-8.col-sm-12
 									.input-group.my-1(v-for="(item, index) in config.admins")
-										input.form-input(type="text" v-model="config.admins[index]" placeholder="SteamID64")
+										input.form-input(type="text" v-model="config.admins[index]" placeholder="User's SteamID64")
 										button.btn.btn-primary.input-group-btn(v-on:click="config.admins.splice(index, 1)")
 											i.icon.icon-minus
+							// Authorizations
 							.form-group
 								.col-4.col-sm-12
-									.input-group.my-1.align-center
-										button.btn.btn-primary.btn-sm(v-on:click="config.authorized.push('')")
+									.input-group.my-1.flex-y-center
+										button.btn.btn-primary.btn-sm(id="add-authorizations" v-on:click="config.authorizations.push('')")
 											i.icon.icon-plus
-										label.form-label.mx-2 Authorized
+										label.form-label.mx-2(for="add-authorizations") Authorizations
 										label.form-checkbox
-											input(type="checkbox" v-model="displayAuthorized" true-value="text" false-value="password")
+											input(type="checkbox" v-model="display.authorizations" true-value="text" false-value="password")
 											i.form-icon
 											| Show
 								.col-8.col-sm-12
-									.input-group.my-1(v-for="(item, index) in config.authorized")
-										input.form-input(v-bind:type="displayAuthorized" v-model="config.authorized[index]")
-										button.btn.btn-primary.input-group-btn(v-on:click="config.authorized.splice(index, 1)")
+									.input-group.my-1(v-for="(item, index) in config.authorizations")
+										input.form-input(v-bind:type="display.authorizations" v-model="config.authorizations[index]")
+										button.btn.btn-primary.input-group-btn(v-on:click="config.authorizations.splice(index, 1)")
 											i.icon.icon-minus
-							.form-group
-								.col-4.col-sm-12
-									label.form-label.my-1 API key
-								.col-8.col-sm-12
-									.input-group.my-1
-										input.form-input(v-bind:type="displayApiKey" v-model="config.apikey")
-										label.form-checkbox.ml-2.pr-0
-											input(type="checkbox" v-model="displayApiKey" true-value="text" false-value="password")
-											i.form-icon
-											| Show
-							.form-group
-								.col-4.col-sm-12
-									label.form-label.my-1 Secret
-								.col-8.col-sm-12
-									.input-group.my-1
-										input.form-input(v-bind:type="displaySecret" v-model="config.secret")
-										label.form-checkbox.ml-2.pr-0
-											input(type="checkbox" v-model="displaySecret" true-value="text" false-value="password")
-											i.form-icon
-											| Show
-							.form-group(name="address")
-								.col-4.col-sm-12
-									label.form-label.my-1 Server address
-								.col-8.col-sm-12
-									.input-group.my-1
-										input.form-input(type="text" v-model="config.server")
+							// Other simpler fields
+							+addField("apikey", "API Key", true, "Steam Web API Key")
+							+addField("secret", "Secret", true, "Secret for session tokens")
+							+addField("server", "Server address", false, "example.com:27015 (port is optional, default: 27015)")
 					.panel-footer
-						pre.code(v-html="output")
 						button.btn.btn-primary.btn-block(type="submit" v-on:click="sendConfig") Save

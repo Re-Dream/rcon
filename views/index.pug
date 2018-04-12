@@ -2,23 +2,23 @@ extends layout
 
 block content
 	.container
-		.columns.cols-centered
-			.column.col-3
+		.columns.flex-center
+			.column.col-3.col-xl-4.col-lg-5.col-md-6.col-sm-12
 				.panel
 					.panel-header.text-center
 						h4.panel-title Control Panel
 					.panel-body
-						pre.code(v-html="output || 'Start with the help command.'")
+						pre.code(v-html="output || 'Start with the \"help\" command.'")
 					.panel-footer
 						.input-group
 							input.form-input(type="text" v-model="cmd" v-on:keyup.enter="sendCommand" placeholder="help")
 							button.btn.btn-primary.input-group-btn(type="submit" v-on:click="sendCommand") Run
-			.column.col-3
+			.column.col-3.col-xl-4.col-lg-5.col-md-6.col-sm-12
 				.panel
 					.panel-header.text-center
 						h4.panel-title Server Status
 						if server.info
-							.panel-subtitle= server.info.name
+							b.panel-subtitle= server.info.name
 					.panel-body
 						if server.info && server.players
 							pre.py-0.my-1
@@ -31,21 +31,10 @@ block content
 						if !server.info
 							.text-error Server offline
 						else if server.info && server.players
-							if server.info.players > 0
-								table.table.table-striped
-									thead: tr
-										th Name
-										th Time online
-									tbody: tr
-										-
-											function pad(num) {
-												return ("00" + num).slice(-2)
-											}
-										each ply in server.players
-											-
-												var h = Math.floor(ply.online / 60 / 60)
-												var m = Math.floor(ply.online / 60 - h * 60)
-												var s = Math.floor(ply.online - m * 60 - h * 60 * 60)
-												var time = h > 1 ? util.format("%s:%s:%s", pad(h), pad(m), pad(s)) : util.format("%s:%s", pad(m), pad(s));
-											td= ply.name
-											td= time
+							table.table(v-if="server.info.players > 0")
+								thead: tr
+									th Name
+									th Time online
+								tbody: tr(v-for="(ply) in server.players")
+									td(v-html="ply.name")
+									td(v-html="niceTime(ply.online)")

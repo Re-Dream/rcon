@@ -5,11 +5,14 @@ var commands = {
 	help: {
 		callback: function(target, req) {
 			var buf = "Available commands:\n"
-			for (name in commands) {
+			for (var name in commands) {
 				var command = commands[name]
 				buf += util.format("	<b>%s</b>%s\n", name, command.help ? ": " + command.help : "")
 			}
-			target.send(buf)
+			target.send({
+				output: buf,
+				success: true
+			})
 			target.close()
 		},
 		help: "Displays this."
@@ -23,7 +26,7 @@ try {
 
 }
 if (custom_commands) {
-	for (name in custom_commands) {
+	for (var name in custom_commands) {
 		if (!commands[name]) {
 			commands[name] = custom_commands[name]
 		}

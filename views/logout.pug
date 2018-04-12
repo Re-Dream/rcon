@@ -1,6 +1,7 @@
 extends layout
 
 block content
-	h1 Goodbye!
-	p You have successfully logged out.
-	a(href="/") Go home
+	meta(http-equiv="refresh" content="4; URL=/")
+	p.text-center(style="white-space: pre;").
+		You have successfully logged out.
+		See you soon!
