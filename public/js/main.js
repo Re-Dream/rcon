@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		var hadSuccess
 		if (!ws) {
 			app.output = ""
+			app.running = true
 			app.finished = false
 			app.success = false
 			app.failed = false
@@ -77,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					app.failed = false
 					app.reason = ""
 				}, 5000);
+				app.running = false
 				ws = undefined
 				console.log("Connection closed")
 			}
@@ -99,6 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			server: pugLocals ? pugLocals.server : undefined,
 			config: pugLocals ? pugLocals.config : undefined,
 
+			running: false,
 			finished: false,
 			failed: false,
 			success: false,
