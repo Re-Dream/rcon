@@ -14,14 +14,23 @@ html
 			header.navbar
 				section.navbar-section(style="margin-left: 10%;")
 					a.btn.btn-link(href="/") Home
+					a.btn.btn-link(href="/config") Configuration
 				section.navbar-center(v-if="!darkTheme")
 					img(src="/img/logo.png" height=32)
 				section.navbar-section(style="margin-right: 10%;")
-					a.btn.btn-link(href="/logout") Logout
-					a.btn.btn-link(href="/config") Configuration
+					if user
+						.dropdown.dropdown-right
+							a.btn.btn-link.dropdown-toggle.p-0(href="#" tabindex="0")
+								.d-flex.flex-center(style="height: 100%;")
+									figure.avatar.avatar-sm.ml-2
+										img(src=user.avatar.large)
+									.px-2= user.username
+							ul.menu.text-right(style="min-width: 120px;")
+								li.menu-item
+									a(href="/logout") Logout
 			h1.text-center Re-Dream
 			block content
-			.columns.flex-x-center.my-2(v-if="finished")
+			.columns.flex-center.my-2(v-if="finished")
 				.col-2.col-sm-12
 					.toast.toast-primary(v-bind:class="{ 'toast-success': success, 'toast-error': failed }" v-html="reason")
 			footer

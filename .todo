@@ -3,35 +3,43 @@ To Do:
 		✘ Get back to using express-ws for simplicity..? @cancelled(18-04-10 15:08)
 	✔ Config support @done(18-04-10 05:34)
 	✔ Steam login @done(18-04-10 05:34)
-	✔ Port the website's look over from the PHP version @done(18-04-10 05:34)
+	✘ Port the website's look over from the PHP version @cancelled(18-04-12 11:47)
 	✔ Allow Websocket connection for logged in users @done(18-04-10 05:34)
 	✔ Command execution @done(18-04-10 15:41)
-		- Get command from text input, create Websocket connection on "Go" button click and send command.
-		- If command is valid, server executes it and responds with output, live.
-		- End connection on command end.
-		- Test with test.cmd for the time being.
+		- Get command from text input, create Websocket connection on "Go" button click and send command
+		- If command is valid, server executes it and responds with output, live
+		- End connection on command end
+		- Test with test.cmd for the time being
 	✔ Make use of sourcequery @done(18-04-10 16:46)
-	✔ Config page to modify all config.json variables on the fly @done(18-04-10 19:38)
+		☐ Refresh data
 	✔ "Authorization" header support, for Discord Bot and !rocket command? @done(18-04-10 21:07)
-		✔ Wrap both WS and HTTP response into a same object for code readability @done(18-04-10 21:07)
+	✔ Wrap both WS and HTTP response into a same object for code readability @done(18-04-10 21:07)
 	✔ Make good front-end @done(18-04-12 05:53)
+		✔ Config page to modify all config.json variables on the fly @done(18-04-10 19:38)
 		✔ Use spectre.css @done(18-04-11 07:08)
 		✔ Implement Vue.js @done(18-04-11 07:08)
 		✔ Pug locals to clientside JavaScript @done(18-04-12 04:10)
 			✔ Find a better way than setting "values" manually everytime (see app.js:77) @done(18-04-12 04:10)
 		✔ Use mixins in Pug to avoid repetition and confusion (config.pug is especially confusing) @done(18-04-12 05:43)
 		✔ Add toasts / notifications to tell when command has ended or config has been saved @done(18-04-12 04:10)
-		☐ Customize navbar more
+		✔ Customize navbar more? @done(18-04-13 00:25)
 		✔ Customize colors more @done(18-04-12 04:10)
+			- Dark theme is good, light theme destroys one's eyes though
 		✘ Center panels vertically (maybe) @cancelled(18-04-12 05:25)
-			- Was too difficult to implement properly.
+			- Too difficult to implement properly and would probably be a pain
 		✔ Check responsiveness @done?(18-04-12 04:10)
 		✔ Make server status player times continue going while the page is active @done(18-04-12 04:38)
 		☐ Add a background image?
 		✔ Add configurable dark theme @done(18-04-12 08:37)
+		✔ Server start / stop / restart button on server status, show up according to status @done(18-04-13 00:24)
+			✔ Pug mixin to add action buttons easily over commands @done(18-04-13 00:24)
+		✔ Display avatar and name somewhere @done(18-04-13 00:12)
 		- More?
 	✔ Check why Steam login is so fucking slow @done?(18-04-12 04:11)
-	☐ Maybe add actual server console, this will be complicated
-	☐ Implement our own custom commands
+	✔ Allow usage without login if in dev mode @done(18-04-12 23:48)
+	☐ /console endpoint to show full console somehow (this will be fucking hard)
+		- Look into github repos for this
+		- Reverse proxy from apache or something?
+	☐ Implement the actual commands
 	✔ Clean up code in general @done(18-04-12 05:53)
 

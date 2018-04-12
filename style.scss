@@ -10,6 +10,10 @@ $dark-color: rgb(21, 46, 70);
 @import "node_modules/spectre.css/src/spectre-icons";
 
 // Custom rules
+#app {
+	min-width: 100vw;
+	min-height: 100vh;
+}
 .flex-center {
 	justify-content: center;
 	align-items: center;
@@ -82,10 +86,6 @@ $darker-success-color: darken($success-color, 17.5%);
 $darker-warning-color: darken($warning-color, 17.5%);
 $darker-error-color: darken($error-color, 17.5%);
 
-#app {
-	min-width: 100vw;
-	min-height: 100vh;
-}
 .dark-theme {
 	background: $dark-color !important;
 	color: $primary-color-light !important;
@@ -133,6 +133,15 @@ $darker-error-color: darken($error-color, 17.5%);
 		}
 		&:active {
 			background: darken($lighter-dark-color, 5%);
+		}
+	}
+
+	.menu {
+		background: $darker-color;
+		border: 1px solid $lighter-dark-color;
+
+		.menu-item > a:focus, .menu-item > a:hover {
+			background: lighten($darker-color, 3%);
 		}
 	}
 

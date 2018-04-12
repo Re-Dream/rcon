@@ -109,11 +109,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			darkTheme: darkTheme !== undefined ? darkTheme : true,
 		},
 		methods: {
-			sendCommand: function() {
+			sendCommand: function(cmd) {
 				var app = this // Needed
 				sendData(function() {
 					ws.send(JSON.stringify({
-						cmd: app.cmd
+						cmd: cmd || app.cmd
 					}))
 				})
 			},

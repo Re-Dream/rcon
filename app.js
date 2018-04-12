@@ -69,12 +69,13 @@ app.use(function(req, res, next) {
 /* GET home page. */
 
 function ifAuthed(req, res, callback) {
-	if (!req.session.steamUser) {
+	var devMode = false // req.app.get("env") === "development"
+	if (!req.session.steamUser && !devMode) {
 		if (res)
 			req.session.from = req.path
 			res.redirect("/authenticate")
 	} else {
-		if (app.config.admins.includes(req.session.steamUser.steamid)) {
+		if (devMode || app.config.admins.includes(req.session.steamUser.steamid)) {
 			callback()
 		} else {
 			if (res)

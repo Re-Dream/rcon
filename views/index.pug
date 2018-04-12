@@ -1,8 +1,13 @@
 extends layout
 
+mixin addButton(cmd, icon, name)
+	button.btn.btn-primary.mr-2(v-on:click=("sendCommand('" + cmd + "')"))&attributes(attributes)
+		i.icon.mr-2(class=("icon-" + icon))
+		= name
+
 block content
 	.container
-		.columns.flex-center
+		.columns.flex-x-center
 			.column.col-3.col-xl-4.col-lg-5.col-md-6.col-sm-12
 				.panel
 					.panel-header.text-center
@@ -11,8 +16,8 @@ block content
 						pre.code(v-html="output || 'Start with the \"help\" command.'")
 					.panel-footer
 						.input-group
-							input.form-input(type="text" v-model="cmd" v-on:keyup.enter="sendCommand" placeholder="help")
-							button.btn.btn-primary.input-group-btn(type="submit" v-on:click="sendCommand") Run
+							input.form-input(type="text" v-model="cmd" v-on:keyup.enter="sendCommand()" placeholder="help")
+							button.btn.btn-primary.input-group-btn(type="submit" v-on:click="sendCommand()") Run
 			.column.col-3.col-xl-4.col-lg-5.col-md-6.col-sm-12
 				.panel
 					.panel-header.text-center
@@ -27,7 +32,6 @@ block content
 							.py-0.my-1
 								.icon.icon-people.mx-1
 								= server.info.players + " / " + server.info.maxplayers
-					.panel-footer
 						if !server.info
 							.text-error Server offline
 						else if server.info && server.players
@@ -38,3 +42,7 @@ block content
 								tbody: tr(v-for="(ply) in server.players")
 									td(v-html="ply.name")
 									td(v-html="niceTime(ply.online)")
+					.panel-footer
+						+addButton("stop", "shutdown", "Shutdown")(v-if="server.info")
+						+addButton("start", "shutdown", "Start")(v-else)
+						+addButton("restart", "refresh", "Restart")
