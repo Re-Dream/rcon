@@ -38,9 +38,8 @@ To Do:
 	✔ Check why Steam login is so fucking slow @done?(18-04-12 04:11)
 	✔ Allow usage without login if in dev mode @done(18-04-12 23:48)
 	☐ /console endpoint to show full console somehow (this will be fucking hard)
-		- https://www.npmjs.com/package/express-http-proxy
-		- https://github.com/nodejitsu/node-http-proxy/issues/891
-		- https://github.com/tsl0922/ttyd
+		- Use xterm.js
+		- Attach to screen somehow and get its output live
 	☐ Implement the actual commands
 	✔ Clean up code in general @done(18-04-12 05:53)
 
