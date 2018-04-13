@@ -32,7 +32,7 @@ html
 			block content
 			.columns.flex-center.my-2(v-if="finished")
 				.col-2.col-sm-12
-					.toast.toast-primary(v-bind:class="{ 'toast-success': success, 'toast-error': failed }" v-html="reason")
+					.toast.toast-primary(v-bind:class="{ 'toast-success': success, 'toast-error': failed }") {{ reason }}
 			footer
 				.footer-section
 					label.form-checkbox.ml-2.pr-0

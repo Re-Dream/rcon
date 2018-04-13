@@ -40,8 +40,8 @@ block content
 									th Name
 									th Time online
 								tbody: tr(v-for="(ply) in server.players")
-									td(v-html="ply.name")
-									td(v-html="niceTime(ply.online)")
+									td {{ ply.name }}
+									td {{ niceTime(ply.online) }}
 					.panel-footer
 						+addButton("stop", "shutdown", "Shutdown")(v-if="server.info")
 						+addButton("start", "shutdown", "Start")(v-else)
