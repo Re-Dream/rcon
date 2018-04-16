@@ -85,7 +85,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	}
 
-	var darkTheme = JSON.parse(Cookies.get("darkTheme"))
+	var darkTheme
+	try {
+		darkTheme = JSON.parse(Cookies.get("darkTheme"))
+	} catch (e) {
+
+	}
 	app = new Vue({
 		el: "#app",
 		data: {
