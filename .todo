@@ -11,7 +11,8 @@ To Do:
 		- End connection on command end
 		- Test with test.cmd for the time being
 	✔ Make use of sourcequery @done(18-04-10 16:46)
-		☐ Refresh data
+		✔ Refresh data @done(18-04-17 01:03)
+		✔ "API" to get server info (/api/server) @done(18-04-17 01:03)
 	✔ "Authorization" header support, for Discord Bot and !rocket command? @done(18-04-10 21:07)
 	✔ Wrap both WS and HTTP response into a same object for code readability @done(18-04-10 21:07)
 	✔ Make good front-end @done(18-04-12 05:53)
@@ -33,8 +34,7 @@ To Do:
 		✔ Server start / stop / restart button on server status, show up according to status @done(18-04-13 00:24)
 		✔ Pug mixin to add action buttons easily over commands @done(18-04-13 00:24)
 		✔ Display avatar and name somewhere @done(18-04-13 00:12)
-		☐ Add a background image?
-		- More?
+		✔ Add a background image? @done(18-04-17 01:26)
 	✔ Check why Steam login is so fucking slow @done?(18-04-12 04:11)
 	✔ Allow usage without login if in dev mode @done(18-04-12 23:48)
 	☐ /console endpoint to show full console somehow (this will be fucking hard)

@@ -14,6 +14,26 @@ $dark-color: rgb(21, 46, 70);
 	min-width: 100vw;
 	min-height: 100vh;
 }
+
+// This is fucking hacky
+#app::before {
+	content: "";
+	background-image: url("/img/logo.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	opacity: 0.33;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+	z-index: 0;
+}
+* {
+	z-index: 1;
+}
+
 .flex-center {
 	justify-content: center;
 	align-items: center;
@@ -33,6 +53,15 @@ $dark-color: rgb(21, 46, 70);
 .mx-auto {
 	margin-left: auto;
 	margin-right: auto;
+}
+.table.playerlist {
+	td {
+		padding-top: .1rem;
+		padding-bottom: .1rem;
+	}
+}
+.panel {
+	background: $light-color;
 }
 .navbar {
 	border-bottom: 1px solid $gray-color-light;
@@ -87,7 +116,7 @@ $darker-warning-color: darken($warning-color, 17.5%);
 $darker-error-color: darken($error-color, 17.5%);
 
 .dark-theme {
-	background: $dark-color !important;
+	background-color: $dark-color;
 	color: $primary-color-light !important;
 
 	header.navbar, footer {

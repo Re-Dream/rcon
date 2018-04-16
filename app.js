@@ -69,7 +69,7 @@ app.use(function(req, res, next) {
 /* GET home page. */
 
 function ifAuthed(req, res, callback) {
-	var devMode = false // req.app.get("env") === "development"
+	var devMode = req.app.get("env") === "development"
 	if (!req.session.steamUser && !devMode) {
 		if (res)
 			req.session.from = req.path
@@ -83,25 +83,43 @@ function ifAuthed(req, res, callback) {
 		}
 	}
 }
-app.get("/", function(req, res) {
-	ifAuthed(req, res, function() {
-		var sq = new SourceQuery(1000)
-		var address = app.config.server.match(/^([^\:]+):?(\d+)?$/gi)
-		var ip = address[0]
-			port = address[1] || 27015
-		sq.open(ip, port)
-		var server = {}
+function getServerInfo() {
+	var sq = new SourceQuery(1000)
+	var address = app.config.server.match(/^([^\:]+):?(\d+)?$/gi)
+	var ip = address[0]
+		port = address[1] || 27015
+	sq.open(ip, port)
+	var server = {}
+
+	return new Promise(function(resolve, reject) {
 		sq.getInfo(function(err, info) {
+			if (err) { reject(err) }
 			server.info = info
 
 			sq.getPlayers(function(err, players) {
+				if (err) { reject(err) }
+
+				for (var k in players) {
+					if (players[k].name === "") {
+						players.splice(k, 1)
+					}
+				}
 				server.players = players
 
-				res.render("index", {
-					server: server
-				})
+				resolve(server)
 			})
 		})
+	})
+}
+app.get("/api/server", function(req, res) {
+	getServerInfo().then(function(data) {
+		res.type("json")
+		res.send(JSON.stringify(data))
+	})
+})
+app.get("/", function(req, res) {
+	ifAuthed(req, res, function() {
+		res.render("index")
 	})
 })
 
@@ -149,7 +167,7 @@ app.server = server
 app.wss = new WebSocket.Server({
 	verifyClient: function(info, done) {
 		app.sessionParser(info.req, {}, function() {
-			done(info.req.session.steamUser)
+			done(info.req.session.steamUser || app.get("env") === "development")
 		})
 	},
 	server

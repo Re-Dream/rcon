@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				secret: "password"
 			},
 
-			server: pugLocals ? pugLocals.server : undefined,
+			server: {},
 			config: pugLocals ? pugLocals.config : undefined,
 
 			running: false,
@@ -128,19 +128,14 @@ document.addEventListener("DOMContentLoaded", function() {
 					}))
 				})
 			},
-			niceTime: function() {
-				var server = this.server
-				for (k in server.players) {
-					var ply = server.players[k]
+			niceTime: function(time) {
+				var online = time + this.onlineAdd
+				var h = Math.floor(online / 60 / 60)
+				var m = Math.floor(online / 60 - h * 60)
+				var s = Math.floor(online - m * 60 - h * 60 * 60)
+				var time = h > 1 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`
 
-					var online = ply.online + this.onlineAdd
-					var h = Math.floor(online / 60 / 60)
-					var m = Math.floor(online / 60 - h * 60)
-					var s = Math.floor(online - m * 60 - h * 60 * 60)
-					var time = h > 1 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`
-
-					return time
-				}
+				return time
 			},
 			saveTheme: function() {
 				Cookies.set("darkTheme", this.darkTheme)
@@ -148,10 +143,19 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 		}
 	})
+
 	if (!app.config) {
+		function refreshServerData() {
+			$.get("/api/server", function(data) {
+				app.onlineAdd = 0
+				app.server = data
+			})
+		}
+		refreshServerData()
 		setInterval(function() {
 			app.onlineAdd++
 		}, 1000)
+		setInterval(refreshServerData, 15000)
 	}
 })
 

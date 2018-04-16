@@ -22,20 +22,18 @@ block content
 				.panel
 					.panel-header.text-center
 						h4.panel-title Server Status
-						if server.info
-							b.panel-subtitle= server.info.name
+						b.panel-subtitle(v-if="server.info") {{ server.info.name }}
 					.panel-body
-						if server.info && server.players
+						div(v-if="server.info && server.players")
 							pre.py-0.my-1
 								.icon.icon-location.mx-1
-								= server.info.map
+								| {{ server.info.map }}
 							.py-0.my-1
 								.icon.icon-people.mx-1
-								= server.info.players + " / " + server.info.maxplayers
-						if !server.info
-							.text-error Server offline
-						else if server.info && server.players
-							table.table(v-if="server.info.players > 0")
+								| {{ server.players.length + " / " + server.info.maxplayers }}
+						.text-error(v-if="!server.info") Server offline
+						div(v-else-if="server.info && server.players")
+							table.table.playerlist(v-if="server.players.length > 0")
 								thead: tr
 									th Name
 									th Time online
