@@ -66,10 +66,11 @@ app.use(function(req, res, next) {
 	next()
 })
 
+const devMode = process.env.NODE_ENV === "development"
+
 /* GET home page. */
 
 function ifAuthed(req, res, callback) {
-	var devMode = req.app.get("env") === "development"
 	if (!req.session.steamUser && !devMode) {
 		if (res)
 			req.session.from = req.path
@@ -155,7 +156,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
 	// set locals, only providing error in development
 	res.locals.message = err.message
-	res.locals.error = req.app.get("env") === "development" ? err : {}
+	res.locals.error = devMode ? err : {}
 
 	// render the error page
 	res.status(err.status || 500)
@@ -167,7 +168,7 @@ app.server = server
 app.wss = new WebSocket.Server({
 	verifyClient: function(info, done) {
 		app.sessionParser(info.req, {}, function() {
-			done(info.req.session.steamUser || app.get("env") === "development")
+			done(info.req.session.steamUser || devMode)
 		})
 	},
 	server
