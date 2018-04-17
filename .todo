@@ -40,6 +40,18 @@ To Do:
 	☐ /console endpoint to show full console somehow (this will be fucking hard)
 		- Use xterm.js
 		- Attach to screen somehow and get its output live
+			- Either we keep screen or we move to tmux
+			- Create a bash script that runs other scripts for simplicity
 	☐ Implement the actual commands
+		- start
+		- stop
+		- restart
+		- fullrestart
+		- update-server
+		- update-addons
+		- More?
+	✔ Deploy on server @done(18-04-17 02:55)
+		☐ Fix some weird bugs
+		☐ Make sure the application restarts if it dies
 	✔ Clean up code in general @done(18-04-12 05:53)
 
