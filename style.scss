@@ -18,7 +18,7 @@ $dark-color: rgb(21, 46, 70);
 // This is fucking hacky
 #app::before {
 	content: "";
-	background-image: url("/img/logo.png");
+	background-image: url("./img/logo.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-attachment: fixed;

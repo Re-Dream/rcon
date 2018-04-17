@@ -13,10 +13,10 @@ html
 		#app(v-bind:class="{ 'dark-theme': darkTheme }")
 			header.navbar
 				section.navbar-section(style="margin-left: 10%;")
-					a.btn.btn-link(href="/") Home
-					a.btn.btn-link(href="/config") Configuration
+					a.btn.btn-link(href="./") Home
+					a.btn.btn-link(href="./config") Configuration
 				section.navbar-center(v-if="!darkTheme")
-					img(src="/img/logo.png" height=32)
+					img(src="./img/logo.png" height=32)
 				section.navbar-section(style="margin-right: 10%;")
 					if user
 						.dropdown.dropdown-right
@@ -27,7 +27,7 @@ html
 									.px-2= user.username
 							ul.menu.text-right(style="min-width: 120px;")
 								li.menu-item
-									a(href="/logout") Logout
+									a(href="./logout") Logout
 			h1.text-center Re-Dream
 			block content
 			.columns.flex-center.my-2(v-if="finished")

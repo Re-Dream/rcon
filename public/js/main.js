@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	if (!app.config) {
 		function refreshServerData() {
-			$.get("/api/server", function(data) {
+			$.get("./api/server", function(data) {
 				app.onlineAdd = 0
 				app.server = data
 			})
