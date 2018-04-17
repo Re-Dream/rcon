@@ -62,7 +62,7 @@ app.use(steam.middleware({
     verify: realm + "/verify",
     apiKey: app.config.apikey}
 ))
-const devMode = process.env.NODE_ENV !== "production"
+const devMode = app.get("env") !== "production"
 app.use(function(req, res, next) {
 	res.locals.devMode = devMode
 	res.locals.user = req.user
