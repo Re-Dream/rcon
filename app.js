@@ -56,18 +56,18 @@ app.use(new RateLimit({
 	delayMs: 0 // disabled
 }))
 app.use(app.sessionParser)
-var realm = app.config.realm || "http://localhost:" + app.get("port")
+var realm = app.config.realm || "http://localhost:" + (process.env.PORT || "3000")
 app.use(steam.middleware({
     realm: realm,
     verify: realm + "/verify",
     apiKey: app.config.apikey}
 ))
+const devMode = process.env.NODE_ENV !== "production"
 app.use(function(req, res, next) {
+	res.locals.devMode = devMode
 	res.locals.user = req.user
 	next()
 })
-
-const devMode = process.env.NODE_ENV === "development"
 
 /* GET home page. */
 

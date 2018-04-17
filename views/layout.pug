@@ -6,7 +6,10 @@ html
 		if values
 			script var pugLocals = !{values.replace(/#<\//g, "<\\/")}
 		script(src="https://code.jquery.com/jquery-3.3.1.min.js")
-		script(src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js")
+		if devMode
+			script(src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js")
+		else
+			script(src="./js/vue.min.js")
 		script(src="./js/cookie.js")
 		script(src="./js/main.js")
 	body
