@@ -74,7 +74,7 @@ const devMode = process.env.NODE_ENV === "development"
 function ifAuthed(req, res, callback) {
 	if (!req.session.steamUser && !devMode) {
 		if (res)
-			req.session.from = req.path
+			req.session.from = "." + req.path
 			res.redirect("./authenticate")
 	} else {
 		if (devMode || app.config.admins.includes(req.session.steamUser.steamid)) {
@@ -134,7 +134,7 @@ app.get("/verify", steam.verify(), function(req, res) {
 	res.redirect(req.session.from || "./")
 	req.session.from = undefined
 })
-app.get("/logout", steam.enforceLogin("/"), function(req, res) {
+app.get("/logout", steam.enforceLogin("./"), function(req, res) {
 	req.logout()
 	res.locals.user = undefined
     res.render("logout")
