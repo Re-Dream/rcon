@@ -56,5 +56,6 @@ block content
 							+addField("apikey", "API Key", true, "Steam Web API Key")
 							+addField("secret", "Secret", true, "Secret for session tokens")
 							+addField("server", "Server address", false, "example.com:27015 (port is optional, default: 27015)")
+							+addField("realm", "Realm", false, "http://localhost:3000")
 					.panel-footer
 						button.btn.btn-primary.btn-block(type="submit" v-on:click="sendConfig") Save

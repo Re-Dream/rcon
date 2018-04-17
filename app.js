@@ -56,9 +56,10 @@ app.use(new RateLimit({
 	delayMs: 0 // disabled
 }))
 app.use(app.sessionParser)
+var realm = api.config.realm || "http://localhost:" + app.get("port")
 app.use(steam.middleware({
-    realm: "http://localhost:3000/",
-    verify: "http://localhost:3000/verify",
+    realm: realm,
+    verify: realm + "/verify",
     apiKey: app.config.apikey}
 ))
 app.use(function(req, res, next) {
