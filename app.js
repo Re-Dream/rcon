@@ -74,7 +74,7 @@ function ifAuthed(req, res, callback) {
 	if (!req.session.steamUser && !devMode) {
 		if (res)
 			req.session.from = req.path
-			res.redirect("/authenticate")
+			res.redirect("./authenticate")
 	} else {
 		if (devMode || app.config.admins.includes(req.session.steamUser.steamid)) {
 			callback()
@@ -130,7 +130,7 @@ app.get("/authenticate", steam.authenticate(), function(req, res) {
 })
 app.get("/verify", steam.verify(), function(req, res) {
 	res.locals.user = req.user
-	res.redirect(req.session.from || "/")
+	res.redirect(req.session.from || "./")
 	req.session.from = undefined
 })
 app.get("/logout", steam.enforceLogin("/"), function(req, res) {
