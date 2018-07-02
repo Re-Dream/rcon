@@ -1,4 +1,4 @@
-const http = require("http")
+const https = require("https")
 const WebSocket = require("ws")
 const createError = require("http-errors")
 const express = require("express")
@@ -42,10 +42,11 @@ app.response.render = function(view, options, ...args) {
 	_render.call(res, view, options, ...args)
 }
 
-// view engine setup
+// View engine
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "pug")
 
+// Middleware
 app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -164,7 +165,10 @@ app.use(function(err, req, res, next) {
 	res.render("error")
 })
 
-const server = http.createServer(app)
+const server = https.createServer({
+	cert: fs.readFileSync("./ssl/cert.pem"),
+	key: fs.readFileSync("./ssl/privkey.pem")
+}, app)
 app.server = server
 app.wss = new WebSocket.Server({
 	verifyClient: function(info, done) {

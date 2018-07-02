@@ -67,6 +67,7 @@ function onListening() {
 		? "pipe " + addr
 		: "port " + addr.port
 	console.log("Listening on " + bind)
+	console.log(`Node JS Version: ${process.version}, Environment: ${process.env.NODE_ENV}`)
 }
 
 /**
