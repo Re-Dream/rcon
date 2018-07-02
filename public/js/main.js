@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				clearTimeout(timeout)
 			}
 
-			ws = new WebSocket("wss://" + location.host)
+			ws = new WebSocket("ws" + (location.protocol.match("https:") ? "s" : "") + " ://" + location.host)
 
 			ws.onopen = function(event) {
 				console.log("Connection opened")

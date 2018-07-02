@@ -1,4 +1,4 @@
-const https = require("https")
+const http = require("http")
 const WebSocket = require("ws")
 const createError = require("http-errors")
 const express = require("express")
@@ -18,7 +18,7 @@ app.sessionParser = session({
 	saveUninitialized: false,
 	secret: app.config.secret
 })
-app.enable('trust proxy')
+app.enable("trust proxy")
 
 // Hack to send all desired locals in one JSON string so the client can also read them
 var badLocals = [
@@ -165,10 +165,7 @@ app.use(function(err, req, res, next) {
 	res.render("error")
 })
 
-const server = https.createServer({
-	cert: fs.readFileSync("./ssl/cert.pem"),
-	key: fs.readFileSync("./ssl/privkey.pem")
-}, app)
+const server = http.createServer(app)
 app.server = server
 app.wss = new WebSocket.Server({
 	verifyClient: function(info, done) {
